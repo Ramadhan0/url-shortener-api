@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: pst_db_pd_2**7n
+      POSTGRES_DB: url_shortener_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - backend_network
+
+  redis:
+    image: redis:7
+    container_name: redis_cache
+    restart: unless-stopped
+    command: [ "redis-server", "--requirepass", "redis_db_pd_1*7" ]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend_network
+
+  # app:
+  #   build: .
+  #   container_name: url_shortener_app
+  #   environment:
+  #     DB_HOST: postgres
+  #     DB_PORT: 5432
+  #     DB_USER: root
+  #     DB_PASSWORD: pst_db_pd_2**7n
+  #     DB_NAME: url_shortener_db
+  #     REDIS_URL: redis://redis:6379  # Ensuring it connects to the redis container
+  #   depends_on:
+  #     - postgres
+  #     - redis  # Ensure app waits for both services to be available
+  #   networks:
+  #     - backend_network
+  #   ports:
+  #     - "5551:5551"  # Exposing port for your app (optional, if needed)
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  backend_network:
+    driver: bridge
