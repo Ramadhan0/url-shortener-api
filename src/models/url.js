@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize'
-import sequelize from '../config/sequelize.js'
+import sequelize from '../config/sequelize'
 
-import User from './user.js'
+import User from './user'
 
 const Url = sequelize.define('Urls', {
   id: {

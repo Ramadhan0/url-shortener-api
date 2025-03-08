@@ -1,5 +1,5 @@
-import User from './user.js'
-import Url from './url.js'
+import User from './user'
+import Url from './url'
 
 // One User has many URLs
 User.hasMany(Url, { foreignKey: 'user_id' })
