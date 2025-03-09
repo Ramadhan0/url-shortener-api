@@ -21,7 +21,6 @@ export const register = async (req, res) => {
     const hashedPassword = await hashPassword(password)
     const newUser = await registerUser({ username, email, password_hash: hashedPassword})
 
-    console.log({ user: { email: newUser.email, user_id: newUser.id } })
     const accessToken = generateAccessToken({ email: newUser.email, user_id: newUser.id })
     const refreshToken = await generateRefreshToken({ email: newUser.email, user_id: newUser.id })
 
