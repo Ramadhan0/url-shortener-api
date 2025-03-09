@@ -24,6 +24,10 @@ const Url = sequelize.define('Urls', {
     unique: true,
     allowNull: false,
   },
+  long_url: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   clicks: {
     type: DataTypes.INTEGER,
     allowNull: false,

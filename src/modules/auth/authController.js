@@ -1,8 +1,8 @@
 import response from '../../helpers/responseHelper'
 import { findUser, registerUser } from './authService'
 import { 
-  generateToken, hashPassword, validatePassword,
-  generateAccessToken, generateRefreshToken, decodeRefreshToken
+  hashPassword, validatePassword, generateAccessToken,
+  generateRefreshToken, decodeRefreshToken
 } from '../../helpers/commomHelpers'
 import { getDataFromRedis } from '../../helpers/redisHelper'
 
@@ -19,13 +19,10 @@ export const register = async (req, res) => {
     
     // Register user
     const hashedPassword = await hashPassword(password)
-    const newUser = await registerUser({ username, email,password_hash: hashedPassword})
+    const newUser = await registerUser({ username, email, password_hash: hashedPassword})
 
-    // Generate JWT Token
-    // const token = generateToken(newUser)
-
-    const accessToken = generateAccessToken(newUser.email)
-    const refreshToken = await generateRefreshToken(newUser.email)
+    const accessToken = generateAccessToken({ email: newUser.email, user_id: newUser.id })
+    const refreshToken = await generateRefreshToken({ email: newUser.email, user_id: newUser.id })
 
     return response(res, 201, "Registered", { 
       newUser: { username, email, createdAt: newUser.createdAt },
@@ -50,13 +47,10 @@ export const login = async (req, res) => {
     const isPwValid = await validatePassword(password, user.password_hash)
     if (!isPwValid) return response(res, 400, 'Invalid credentials')
 
-    // Generate JWT Token
-    // const token = generateToken(user)
+    const accessToken = generateAccessToken({ email: user.email, user_id: user.id })
+    const refreshToken = await generateRefreshToken({ email: user.email, user_id: user.id })
 
-    const accessToken = generateAccessToken(user.email)
-    const refreshToken = await generateRefreshToken(user.email)
-
-    return response(res, 200, 'Success', { user: {username: user.username, email: user.email }, accessToken, refreshToken })
+    return response(res, 200, 'Success', { user: { username: user.username, email: user.email }, accessToken, refreshToken })
   } catch (error) {
     console.error('Error during login:', error)
     return response(res, 500, 'Internal server error')
@@ -69,19 +63,13 @@ export const refreshToken = async (req, res) => {
 
   try {
     // Find refresh token in Redis
-    const email = await decodeRefreshToken(refreshToken)
+    const user = await decodeRefreshToken(refreshToken)
+    if (!user) return response(res, 403, 'Invalid refresh token')
 
-    if (!email) return response(res, 403, 'Invalid refresh token')
-
-    const redisRefreshToken = await getDataFromRedis(`refreshToken:${email}`)
-
-    console.log(refreshToken)
-    console.log(redisRefreshToken)
-
+    const redisRefreshToken = await getDataFromRedis(`refreshToken:${user.user_id}`)
     if (redisRefreshToken !== refreshToken) return response(res, 403, 'Refresh token mismatch')
 
-    const newAccessToken = generateAccessToken(email)
-
+    const newAccessToken = generateAccessToken({ email: user.email, user_id: user.user_id })
     return res.json({ accessToken: newAccessToken })
   } catch (error) {
     console.error('Error during login:', error)

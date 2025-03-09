@@ -6,7 +6,7 @@ import urlShortenerRouter from './urlShortener/index.js'
 const appRouter = express.Router()
 
 appRouter.use('/auth', authRouter)
-appRouter.use('/url', urlShortenerRouter)
+appRouter.use('/urls', urlShortenerRouter)
 
 
 export default appRouter
