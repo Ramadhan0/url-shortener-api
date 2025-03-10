@@ -23,19 +23,19 @@ jobs:
 
       - name: Add DigitalOcean SSH host to known hosts
         run: |
-          ssh-keyscan -H ${{ secrets.DO_SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.DO_SSH_HOST }} >> ~/.ssh/known_hostsq
 
       - name: SSH into DigitalOcean and deploy the app
         run: |
           ssh -o StrictHostKeyChecking=no root@${{ secrets.DO_SSH_HOST }} << 'EOF'
-            # Change to the directory where your app should be cloned
-            cd /path/to/your/directory
+            # directory where your app should be cloned
+            cd projects/
 
             # Clone the repository (if it’s already cloned, you can pull the latest changes)
-            git clone https://github.com/Ramadhan0/url-shortener-api.git || (cd your-repository && git pull)
+            git clone https://github.com/Ramadhan0/url-shortener-api.git || (cd url-shortener-api/ && git pull)
 
             # Navigate to the application folder
-            cd your-repository
+            cd url-shortener-api/
 
             # Run Docker Compose to bring up the app
             docker-compose up -d
