@@ -25,7 +25,7 @@ export const register = async (req, res) => {
     const refreshToken = await generateRefreshToken({ email: newUser.email, user_id: newUser.id })
 
     return response(res, 201, "Registered", { 
-      newUser: { username, email, createdAt: newUser.createdAt },
+      user: { username, email },
       accessToken, refreshToken
     })
   } catch (error) {

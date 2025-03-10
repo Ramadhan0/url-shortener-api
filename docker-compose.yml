@@ -29,23 +29,28 @@ services:
     networks:
       - backend_network
 
-  # app:
-  #   build: .
-  #   container_name: url_shortener_app
-  #   environment:
-  #     DB_HOST: postgres
-  #     DB_PORT: 5432
-  #     DB_USER: root
-  #     DB_PASSWORD: pst_db_pd_2**7n
-  #     DB_NAME: url_shortener_db
-  #     REDIS_URL: redis://redis:6379  # Ensuring it connects to the redis container
-  #   depends_on:
-  #     - postgres
-  #     - redis  # Ensure app waits for both services to be available
-  #   networks:
-  #     - backend_network
-  #   ports:
-  #     - "5551:5551"  # Exposing port for your app (optional, if needed)
+  app:
+    build: .
+    container_name: url_shortener_app
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: root
+      DB_PASSWORD: pst_db_pd_2**7n
+      DB_NAME: url_shortener_db
+      REDIS_URL: redis://redis:6379PORT=5551
+      ACCESS_TOKEN_EXPIRY: 15m
+      REFRESH_TOKEN_EXPIRY: 7d
+      JWT_SECRET: jwt_secret_key
+      ACCESS_TOKEN_SECRET: access_token_secret  
+      REFRESH_TOKEN_SECRET: refresh_token_secret
+    depends_on:
+      - postgres
+      - redis  # Ensure app waits for both services to be available
+    networks:
+      - backend_network
+    ports:
+      - "5551:5551"  # Exposing port for your app (optional, if needed)
 
 volumes:
   postgres_data:
