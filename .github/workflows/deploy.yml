@@ -1,0 +1,44 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up SSH key for DigitalOcean
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DO_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+        env:
+          DO_SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_PRIVATE_KEY }}
+
+      - name: Add DigitalOcean SSH host to known hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.DO_SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: SSH into DigitalOcean and deploy the app
+        run: |
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.DO_SSH_HOST }} << 'EOF'
+            # Change to the directory where your app should be cloned
+            cd /path/to/your/directory
+
+            # Clone the repository (if it’s already cloned, you can pull the latest changes)
+            git clone https://github.com/Ramadhan0/Y-ello-Aura-Api.git || (cd your-repository && git pull)
+
+            # Navigate to the application folder
+            cd your-repository
+
+            # Run Docker Compose to bring up the app
+            docker-compose up -d
+          EOF
+        env:
+          DO_SSH_HOST: ${{ secrets.DO_SSH_HOST }}
