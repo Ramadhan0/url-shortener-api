@@ -1,3 +1,6 @@
+[![Deploy to DigitalOcean](https://github.com/Ramadhan0/url-shortener-api/actions/workflows/deploy.yml/badge.svg)](https://github.com/Ramadhan0/url-shortener-api/actions/workflows/deploy.yml)
+
+_________________________________________________________
 # 🚀 URL Shortener Backend
 
 This is a URL shortener backend built using **Node.js**, **Express.js**, **Sequelize (PostgreSQL)**, and **Redis**.
