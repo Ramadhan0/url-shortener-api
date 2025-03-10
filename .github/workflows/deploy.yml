@@ -32,7 +32,7 @@ jobs:
             cd /path/to/your/directory
 
             # Clone the repository (if it’s already cloned, you can pull the latest changes)
-            git clone https://github.com/Ramadhan0/Y-ello-Aura-Api.git || (cd your-repository && git pull)
+            git clone https://github.com/Ramadhan0/url-shortener-api.git || (cd your-repository && git pull)
 
             # Navigate to the application folder
             cd your-repository
