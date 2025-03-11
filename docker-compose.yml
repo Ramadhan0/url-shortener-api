@@ -38,7 +38,7 @@ services:
       DB_USER: root
       DB_PASSWORD: pst_db_pd_2**7n
       DB_NAME: url_shortener_db
-      REDIS_URL: redis://redis:6379
+      REDIS_URL: redis://default:redis_db_pd_1*7@redis:6379
       PORT: 5551
       ACCESS_TOKEN_EXPIRY: 15m
       REFRESH_TOKEN_EXPIRY: 7d
