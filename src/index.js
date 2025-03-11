@@ -16,7 +16,6 @@ const redis_url = process.env.REDIS_URL
 const frontend_port = 5173
 const frontend_prod_ip = "137.184.36.97"
 
-
 const getServerIP = () => {
   const interfaces = os.networkInterfaces()
   for (const interfaceName in interfaces) {
@@ -32,18 +31,20 @@ const getServerIP = () => {
 const serverIP = getServerIP()
 console.log(`🌐 Server IP: ${serverIP}`)
 
-
 const corsOptions = {
   origin: [
+    "http://137.184.36.97:5173",
     `http://${serverIP}:${frontend_port}`,
-    `http://localhost:${frontend_port}`,
-    `http://${frontend_prod_ip}:${frontend_port}`,
+    `http://localhost:${frontend_port}`
   ],
-  credentials: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+  credentials: true
 }
 
-
 app.use(cors(corsOptions))
+app.options('*', cors(corsOptions))
+
 app.use(morgan('dev'))
 app.use(cookieParser())
 app.use(express.json())
@@ -55,6 +56,7 @@ redisClient.on('error', (err) => console.error('Redis Client Error', err))
 redisClient.connect().then(() => console.log('✅ Connected to Redis'))
 
 app.use('/api/v1', appRouter)
+app.use('/test', (req, res) => res.send("Running"))
 
 sequelize.sync({ alter: true })
   .then(() => console.log('✅ Database Synced'))

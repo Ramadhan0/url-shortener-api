@@ -41,9 +41,7 @@ jobs:
             # Run Docker Compose to bring up the app
             docker-compose down
             docker rmi url_shortener:latest
-            docker-compose up -d
-
-            docker-compose up -d
+            docker-compose up -d --build
           EOF
         env:
           DO_SSH_HOST: ${{ secrets.DO_SSH_HOST }}
