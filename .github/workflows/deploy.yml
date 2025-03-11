@@ -32,12 +32,17 @@ jobs:
             cd projects/
 
             # Clone the repository (if it’s already cloned, you can pull the latest changes)
-            git clone https://github.com/Ramadhan0/url-shortener-api.git || (cd url-shortener-api/ && git pull)
+            git clone https://github.com/Ramadhan0/url-shortener-api.git
+            cd url-shortener-api/ && git pull --rebase
 
             # Navigate to the application folder
             cd url-shortener-api/
 
             # Run Docker Compose to bring up the app
+            docker-compose down
+            docker rmi url_shortener:latest
+            docker-compose up -d
+
             docker-compose up -d
           EOF
         env:

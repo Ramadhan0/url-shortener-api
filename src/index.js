@@ -14,6 +14,7 @@ const app = express()
 const PORT = process.env.PORT || 5000
 const redis_url = process.env.REDIS_URL
 const frontend_port = 5173
+const frontend_prod_ip = "137.184.36.97"
 
 
 const getServerIP = () => {
@@ -35,7 +36,8 @@ console.log(`🌐 Server IP: ${serverIP}`)
 const corsOptions = {
   origin: [
     `http://${serverIP}:${frontend_port}`,
-    `http://localhost:${frontend_port}`
+    `http://localhost:${frontend_port}`,
+    `http://${frontend_prod_ip}:${frontend_port}`,
   ],
   credentials: true,
 }
