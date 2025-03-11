@@ -6,11 +6,10 @@ COPY package*.json ./
 
 RUN npm install
 
-
 COPY . .
 
 RUN npm run build
 
 EXPOSE 5551
 
-CMD ["npm", "start"]
+CMD ["sh", "-c", "npm run migrate && npm start"]

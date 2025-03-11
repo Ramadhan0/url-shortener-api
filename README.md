@@ -45,7 +45,7 @@ REDIS_URL=redis://default:redis_db_pd_1*7@localhost:6379
 #### 🐳 Running PostgreSQL & Redis with Docker
 
 ```sh
-docker-compose up -d
+docker-compose up -d url_shortener
 ```
 
 
